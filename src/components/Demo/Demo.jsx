@@ -1,7 +1,8 @@
 import { useState, useEffect } from "react";
 import { copy, linkIcon, loader, tick } from "../../assets";
-
 import { useLazyGetSummaryQuery } from "../../services/article";
+
+import PopupMenu from "./PopupMenu";
 
 export const Demo = () => {
   const [article, setArticle] = useState({ url: "", summary: "" });
@@ -9,15 +10,18 @@ export const Demo = () => {
   const [allArticles, setAllArticles] = useState([]);
 
   const [copied, setCopied] = useState("");
-
+  
   const [getSummary, { error, isFetching }] = useLazyGetSummaryQuery();
 
   useEffect(() => {
-    const articlesFromLocalStorage = JSON.parse(localStorage.getItem("article"));
+    const articlesFromLocalStorage = JSON.parse(
+      localStorage.getItem("article")
+    );
     if (articlesFromLocalStorage) {
       setAllArticles(articlesFromLocalStorage);
     }
   }, []);
+
   const handleSubmit = async (e) => {
     e.preventDefault();
     const { data } = await getSummary({ articleUrl: article.url });
@@ -33,6 +37,7 @@ export const Demo = () => {
       localStorage.setItem("article", JSON.stringify(updatedAllArticles));
     }
   };
+
   const handleCopy = (copyUrl) => {
     setCopied(copyUrl);
     navigator.clipboard.writeText(copyUrl);
@@ -40,6 +45,7 @@ export const Demo = () => {
       setCopied(false);
     }, 3000);
   };
+
   return (
     <section className="mt-16 w-full max-w-xl">
       {/* Search */}
@@ -106,13 +112,32 @@ export const Demo = () => {
           article.summary && (
             <div className="flex flex-col gap-3">
               <h2 className="font-satoshi font-bold text-gray-600 text-xl">
-                Article
-                <span className="blue_gradient">Summary</span>
+                Article <span className="blue_gradient">Summary</span>
               </h2>
               <div className="summary_box">
                 <p className="font-inter font-medium text-sm text-gray-700">
                   {article.summary}
                 </p>
+                <div className="relative flex justify-center items-center mt-5">
+                  <button
+                    type="button"
+                    className="black_btn peer-focus:border-gray-700 peer-focus:text-gray-700"
+                  >
+                    {<PopupMenu article={article.summary} />}
+                  </button>
+
+                  {/* <button
+                    type="button"
+                    className="rounded-full border border-green-600 bg-green-600 py-1.5 px-5 text-sm text-white transition-all hover:bg-white hover:text-green-600 ml-2"
+                    onClick={() =>
+                      Object.values(lang_selector).map((lng, index) =>
+                        console.table(lng + " " + index)
+                      )
+                    }
+                  >
+                    Choose Language
+                  </button> */}
+                </div>
               </div>
             </div>
           )
