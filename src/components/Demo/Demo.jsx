@@ -1,17 +1,17 @@
 import { useState, useEffect } from "react";
+
 import { copy, linkIcon, loader, tick } from "../../assets";
 import { useLazyGetSummaryQuery } from "../../services/article";
-
 import PopupMenu from "./PopupMenu";
 
 export const Demo = () => {
+  const [getSummary, { error, isFetching }] = useLazyGetSummaryQuery();
+
   const [article, setArticle] = useState({ url: "", summary: "" });
 
   const [allArticles, setAllArticles] = useState([]);
 
   const [copied, setCopied] = useState("");
-
-  const [getSummary, { error, isFetching }] = useLazyGetSummaryQuery();
 
   useEffect(() => {
     const articlesFromLocalStorage = JSON.parse(
@@ -34,8 +34,13 @@ export const Demo = () => {
       const updatedAllArticles = [newArticle, ...allArticles];
       setArticle(newArticle);
       setAllArticles(updatedAllArticles);
+
       localStorage.setItem("article", JSON.stringify(updatedAllArticles));
     }
+  };
+
+  const handleHistoryURL = (item) => {
+    setArticle(item);
   };
 
   const handleCopy = (copyUrl) => {
@@ -79,7 +84,7 @@ export const Demo = () => {
           {allArticles.map((item, index) => (
             <div
               key={`link-${index}`}
-              onClick={() => setArticle(item)}
+              onClick={() => handleHistoryURL(item)}
               className="link_card"
             >
               <div className="copy_btn" onClick={() => handleCopy(item.url)}>

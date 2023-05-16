@@ -1,10 +1,8 @@
 import { useState, useEffect } from "react";
-import "./PopupMenu.css"; // import CSS file for styling
-import { copy, linkIcon, loader, tick } from "../../assets";
 
+import { loader } from "../../assets";
 import { lang_selector } from "../../constants/lang_selector";
 import { useLazyGetTranslateQuery } from "../../services/article";
-import { TranslatedText } from "./TranslatedText";
 
 function PopupMenu(article) {
   const list = Object.values(lang_selector);
@@ -13,11 +11,11 @@ function PopupMenu(article) {
   const [isOpen, setIsOpen] = useState(false);
   const [displayedItems, setDisplayedItems] = useState(list.slice(0, 10));
 
-  const [getTranslate, { errorTr, isFetchingTr }] = useLazyGetTranslateQuery();
+  const [getTranslate, { error, isFetching }] = useLazyGetTranslateQuery();
 
   useEffect(() => {
     function handleClickOutside(event) {
-      if (isOpen && !event.target.closest(".popup-menu")) {
+      if (isOpen && !event.target.closest(".bg-slate-50")) {
         setIsOpen(false);
       }
     }
@@ -47,23 +45,34 @@ function PopupMenu(article) {
     setTranslatedArticle(Object.values(trDATA.data.data.translations)[0]);
   };
 
-  function handleScroll(event) {
+  const handleScroll = (event) => {
     const { scrollTop, clientHeight, scrollHeight } = event.target;
     if (scrollTop + clientHeight >= scrollHeight) {
       setDisplayedItems(list.slice(0, displayedItems.length + 10));
     }
-  }
+  };
+
+  const handleClose = () => {
+    setTranslatedArticle("");
+    setSelected("Translate");
+  };
 
   return (
     <>
-      {isFetchingTr ? (
-        <img src={loader} alt="loader" className="w-20 h-20 object-contain" />
-      ) : errorTr ? (
+      {isFetching ? (
+        <div className="my-10 max-w-full flex justify-center items-center">
+          <img
+            src={loader}
+            alt="loader"
+            className="flex justify-center items-center w-20 h-20 object-contain"
+          />
+        </div>
+      ) : error ? (
         <p className="font-inter font-bold text-black text-center">
           Well, that was not supposed to happen...
           <br />
           <span className="font-satoshi font-normal text-gray-700">
-            {errorTr?.data?.error}
+            {error?.data?.error}
           </span>
         </p>
       ) : (
@@ -72,16 +81,23 @@ function PopupMenu(article) {
             type="button"
             className="black_btn peer-focus:border-gray-700 peer-focus:text-gray-700"
           >
-            <div className="popup-menu">
+            <div className="relative">
               <span onClick={() => setIsOpen(!isOpen)}>
                 {selected ? selected : "Translate"}
               </span>
 
               {isOpen && (
-                <div className="popup-menu-content" onScroll={handleScroll}>
-                  <ul>
+                <div
+                  className="absolute left-0 top-10 z-10 bg-slate-50 border border-gray-300 rounded-lg shadow-md max-h-200 overflow-y-auto p-2 text-black mx-auto"
+                  onScroll={handleScroll}
+                >
+                  <ul className="list-none m-0 p-0">
                     {list.map((lang, index) => (
-                      <li key={index} onClick={selectedHandle}>
+                      <li
+                        className="p-1 cursor-pointer hover:bg-gray-300"
+                        key={index}
+                        onClick={selectedHandle}
+                      >
                         {lang}
                       </li>
                     ))}
@@ -96,6 +112,17 @@ function PopupMenu(article) {
         <p className="font-inter font-medium text-sm text-gray-700 border-t-red-950 mt-5">
           {translatedArticle}
         </p>
+      )}
+      {translatedArticle && (
+        <div className="relative flex justify-center items-center mt-5">
+          <button
+            type="button"
+            className="black_btn peer-focus:border-gray-700 peer-focus:text-gray-700"
+            onClick={handleClose}
+          >
+            Close
+          </button>
+        </div>
       )}
     </>
   );
