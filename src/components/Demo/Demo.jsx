@@ -75,7 +75,7 @@ export const Demo = () => {
             type="submit"
             className="submit_btn peer-focus:border-gray-700 peer-focus:text-gray-700"
           >
-            ☺☻
+            Enter
           </button>
         </form>
         <div className="flex flex-col gap-1 max-h-60 overflow-y-auto">
