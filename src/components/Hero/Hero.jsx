@@ -7,7 +7,7 @@ export const Hero = () => {
         <img src={logo} alt="summarizer-logo" className="w-28 object-contain" />
         <button
           type="button"
-          onClick={() => window.open("https://github.com/d3bel/")}
+          onClick={() => window.open("https://github.com/d3bel/ai_summarizer")}
           className="black_btn"
         >
           GitHub

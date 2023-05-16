@@ -53,7 +53,6 @@ export const Demo = () => {
 
   return (
     <section className="mt-16 w-full max-w-xl">
-      {/* Search */}
       <div className="flex flex-col w-full gap-full">
         <form
           className="relative flex justify-center items-center"
@@ -79,7 +78,6 @@ export const Demo = () => {
             ☺☻
           </button>
         </form>
-        {/* Browse URL History */}
         <div className="flex flex-col gap-1 max-h-60 overflow-y-auto">
           {allArticles.map((item, index) => (
             <div
@@ -101,7 +99,6 @@ export const Demo = () => {
           ))}
         </div>
       </div>
-      {/* Display results */}
       <div className="my-10 max-w-full flex justify-center items-center">
         {isFetching ? (
           <img src={loader} alt="loader" className="w-20 h-20 object-contain" />
