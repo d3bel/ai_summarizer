@@ -10,7 +10,7 @@ export const Demo = () => {
   const [allArticles, setAllArticles] = useState([]);
 
   const [copied, setCopied] = useState("");
-  
+
   const [getSummary, { error, isFetching }] = useLazyGetSummaryQuery();
 
   useEffect(() => {
@@ -118,26 +118,7 @@ export const Demo = () => {
                 <p className="font-inter font-medium text-sm text-gray-700">
                   {article.summary}
                 </p>
-                <div className="relative flex justify-center items-center mt-5">
-                  <button
-                    type="button"
-                    className="black_btn peer-focus:border-gray-700 peer-focus:text-gray-700"
-                  >
-                    {<PopupMenu article={article.summary} />}
-                  </button>
-
-                  {/* <button
-                    type="button"
-                    className="rounded-full border border-green-600 bg-green-600 py-1.5 px-5 text-sm text-white transition-all hover:bg-white hover:text-green-600 ml-2"
-                    onClick={() =>
-                      Object.values(lang_selector).map((lng, index) =>
-                        console.table(lng + " " + index)
-                      )
-                    }
-                  >
-                    Choose Language
-                  </button> */}
-                </div>
+                {<PopupMenu article={article.summary} />}
               </div>
             </div>
           )

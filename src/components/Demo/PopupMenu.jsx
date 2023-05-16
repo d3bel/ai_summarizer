@@ -67,28 +67,37 @@ function PopupMenu(article) {
           </span>
         </p>
       ) : (
-        <div className="popup-menu">
-          <span onClick={() => setIsOpen(!isOpen)}>
-            {selected ? selected : "Translate"}
-          </span>
+        <div className="relative flex justify-center items-center mt-5">
+          <button
+            type="button"
+            className="black_btn peer-focus:border-gray-700 peer-focus:text-gray-700"
+          >
+            <div className="popup-menu">
+              <span onClick={() => setIsOpen(!isOpen)}>
+                {selected ? selected : "Translate"}
+              </span>
 
-          {isOpen && (
-            <div className="popup-menu-content" onScroll={handleScroll}>
-              <ul>
-                {list.map((lang, index) => (
-                  <li key={index} onClick={selectedHandle}>
-                    {lang}
-                  </li>
-                ))}
-              </ul>
+              {isOpen && (
+                <div className="popup-menu-content" onScroll={handleScroll}>
+                  <ul>
+                    {list.map((lang, index) => (
+                      <li key={index} onClick={selectedHandle}>
+                        {lang}
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+              )}
             </div>
-          )}
+          </button>
         </div>
       )}
+      {translatedArticle && (
+        <p className="font-inter font-medium text-sm text-gray-700 border-t-red-950 mt-5">
+          {translatedArticle}
+        </p>
+      )}
     </>
-    
-   
-  
   );
 }
 
